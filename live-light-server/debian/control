@@ -1,0 +1,18 @@
+Source: live-light-server
+Section: web
+Priority: optional
+Maintainer: Haseeb Majid <hello@haseebmajid.dev>
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.4.0
+Homepage: https://gitlab.com/hmajid2301/live-light/
+#Vcs-Browser: https://salsa.debian.org/debian/live-light-server
+#Vcs-Git: https://salsa.debian.org/debian/live-light-server.git
+
+Package: live-light-server
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    python3,
+    nginx,
+    python3-pip
+Description: Deploys the live-light Server
+ A simple REST API to change the colour of Primoroni mood light.

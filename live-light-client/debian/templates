@@ -1,0 +1,19 @@
+Template: live-light-client/usb_name
+Type: string
+Description: The name of the USB device:
+ The name of the USB as shown in `lsusb`, this is the USB device
+ that will be checked for to updating the color of the mood light.
+
+Template: live-light-client/pi_address
+Type: string
+Description: Address of your PI:
+ Either an FQDN such as http://raspberrypi.local or the IP address
+ to connect `live-light-server`. This should be where your
+ `live-light-server` should be running.
+
+Template: live-light-client/logging_level
+Type: multiselect
+Choices: DEBUG, INFO, WARNING, ERROR, CRITICAL
+Default: INFO
+Description: Logging Level:
+ Set the logging level of the app.

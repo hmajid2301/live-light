@@ -1,0 +1,14 @@
+[Unit]
+Description=gunicorn daemon for /usr/share/live-light-server/main.py
+After=network.target
+
+[Service]
+User=pi
+Group=www-data
+WorkingDirectory=/usr/share/live-light-server
+ExecStart=sudo /usr/share/live-light-server/venv/bin/gunicorn --bind=unix:/tmp/gunicorn.sock --workers=4 main:app
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,8 @@
+#!/bin/bash -e
+. /usr/share/debconf/confmodule
+
+db_input high live-light-client/usb_name || true
+db_input high live-light-client/pi_address || true
+db_input high live-light-client/logging_level || true
+db_go
+db_stop

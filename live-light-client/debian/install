@@ -1,0 +1,2 @@
+python/* /usr/share/live-light-client/
+service/* /lib/systemd/system/

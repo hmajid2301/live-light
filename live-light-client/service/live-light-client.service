@@ -1,0 +1,14 @@
+[Unit]
+Description=pyudev daemon for /usr/share/live-light-client/main.py
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/usr/share/live-light-client
+ExecStart=/usr/share/live-light-client/venv/bin/python main.py
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,17 @@
+Source: live-light-client
+Section: python
+Priority: optional
+Maintainer: Haseeb Majid <hello@haseebmajid.dev>
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.4.0
+Homepage: https://gitlab.com/hmajid2301/live-light/
+
+#Vcs-Browser: https://salsa.debian.org/debian/live-light-client
+#Vcs-Git: https://salsa.debian.org/debian/live-light-client.git
+
+Package: live-light-client
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends},
+    python3
+Description: Deploys the live-light client
+ A client which interacts with the live-light-server to update the mood light.

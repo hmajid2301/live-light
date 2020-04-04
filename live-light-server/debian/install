@@ -1,0 +1,3 @@
+flask/* /usr/share/live-light-server/
+nginx/* /etc/nginx/conf.d/
+service/* /lib/systemd/system/
