@@ -72,6 +72,7 @@ of them.
 - Set Active/inactive colour via config
 - Allow other methods of changing colour (generalise)
 - Extend `live-light-server` api to be able to display more complicated patterns
+- Add docker images
 
 ## Appendix
 
