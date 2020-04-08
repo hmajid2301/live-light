@@ -24,21 +24,46 @@ case "$1" in
 
         db_get live-light-client/usb_name
         usb_name=$RET
-        db_get live-light-client/pi_address
-        pi_address=$RET
+        db_get live-light-client/server_address
+        server_address=$RET
+        db_get live-light-client/active_days
+        active_days=$RET
+        db_get live-light-client/start_time
+        start_time=$RET
+        db_get live-light-client/end_time
+        end_time=$RET
+        db_get live-light-client/active_color
+        active_color=$RET
+        db_get live-light-client/inactive_color
+        inactive_color=$RET
         db_get live-light-client/logging_level
-        logging=$RET
+        logging_level=$RET
 
         pip3 install virtualenv
-        virtualenv /usr/share/live-light-client/venv -p python3
-        source /usr/share/live-light-client/venv/bin/activate
-        pip install -r /usr/share/live-light-client/requirements.txt
+        cd /usr/share/live-light-client
+        virtualenv venv -p python3
+        source venv/bin/activate
+        pip install -r requirements.txt
 
-        echo '[main]' > /usr/share/live-light-client/live-light-client.conf
-        echo "usb_name=${usb_name}" >> /usr/share/live-light-client/live-light-client.conf
-        echo "pi_address=${pi_address}" >> /usr/share/live-light-client/live-light-client.conf
-        echo "logging_level=${logging}" >> /usr/share/live-light-client/live-light-client.conf
-        echo "" >> /usr/share/live-light-client/live-light-client.conf
+        echo '[main]' > live-light-client.conf
+        echo "usb_name=${usb_name}" >> live-light-client.conf
+        echo "server_address=${server_address}" >> live-light-client.conf
+        echo "" >> live-light-client.conf
+
+        echo '[schedule]' >> live-light-client.conf
+        echo "active_days=${active_days}" >> live-light-client.conf
+        echo "start_time=${start_time}" >> live-light-client.conf
+        echo "end_time=${end_time}" >> live-light-client.conf
+        echo "" >>  live-light-client.conf
+
+        echo '[color]' >> live-light-client.conf
+        echo "active=${active_color}" >> live-light-client.conf
+        echo "inactive=${inactive_color}" >> live-light-client.conf
+        echo "" >>  live-light-client.conf
+
+        echo '[other]' >> live-light-client.conf
+        echo "logging_level=${logging_level}" >> live-light-client.conf
+        echo "" >>  live-light-client.conf
         db_stop
 
     ;;

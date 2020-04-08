@@ -31,7 +31,9 @@ curl -X PUT --header "Content-Type: application/json"\
 
 This debian package is to be installed on the host machine where the USB will be plugged into.
 In my case it's my Desktop where it detects if my headset is plugged in and changes the colour
-accordingly. When you install the package it will ask a few questions.
+accordingly. The live lights uses a basic schedule you provide outside of the day and hours
+you provide it will switch itself off. By default it will be on between the hours of 9AM -> 5.30PM,
+only on Mon - Fri (not turned on at weekends).
 
 ### USB Name
 
@@ -49,18 +51,82 @@ Bus 003 Device 003: ID 05e3:0608 Genesys Logic, Inc. Hub
 ...
 ```
 
-### PI Address
+### Server Address
 
-The address (including schema) of your `live-light-server`. Such as `http://raspberrypi.local`.
-This is the URL the client will make the requests to.
+The address (including schema) of your `live-light-server`. Such as `http://raspberrypi.local`. This is the URL the
+client will make the requests to.
+
+### Example Config
+
+Once the debconf values have all been filled the `live-light-client.conf` may look something like.
+
+```ini
+[main]
+usb_name=Corsair VOID RGB USB Gaming Headset
+server_address=http://raspberrypi.local
+
+[schedule]
+active_days=Monday,Tuesday,Wednesday,Thursday,Friday
+start_time=09:00
+end_time=17:30
+
+[color]
+active=#FF0000
+inactive=#00FF00
+
+[other]
+logging_level=INFO
+```
 
 ## Demo
 
 [![Live Light Demo](http://i3.ytimg.com/vi/7YuyvgypuXI/maxresdefault.jpg)](http://www.youtube.com/watch?v=7YuyvgypuXI "Live Light Demo")
 
+## Installation
+
+* Go to [releases](https://gitlab.com/hmajid2301/live-light/-/releases)
+* Download artifacts
+* Install `live-light-client` on your personal machine
+* Install `live-light-server` on your PI
+
+### Example
+
+The example assumes you want to use version 0.1.0. It also assumes you can ssh to your
+raspberrypi using the username `pi` and "domain" `raspberrypi.local`. Adjust below
+as required.
+
+```bash
+wget https://gitlab.com/hmajid2301/live-light/-/jobs/502692706/artifacts/download
+unzip artifacts.zip
+sudo dpkg -i live-light-client*.deb
+
+# Copy server .deb to PI
+scp live-light-server*.deb pi@raspberrypi.local:~/
+ssh pi@raspberrypi.local
+sudo dpkg -i live-light-server*.deb
+```
+
+### Build from Source
+
+You can also build the debian packages from source.
+
+```bash
+sudo apt install build-essential autoconf automake autotools-dev dh-make debhelper devscripts fakeroot xutils lintian \
+                pbuilder
+git clone https://gitlab.com/hmajid2301/live-light.git
+cd live-light-client
+debuild -i -us -uc -b
+cd live-light-server
+debuild -i -us -uc -b
+
+# Location of the debian packages
+cd ..
+ls -l *.deb
+```
+
 ## Reasoning
 
-This is a just simple tool I built over a weekend during the coronavirus lockdown, so that others in my household
+This is a just simple tool I built When you install the package it will ask a few questions. over a weekend during the coronavirus lockdown, so that others in my household
 would know when I was in a meeting. The reason I ended up changing the light by using a USB was because I have a lot
 of impromptu meetings that aren't in my calendar. I did think about using my calendar originally. Also I end up using
 a few meeting apps such as Skype, Slack & Teams. So it also wouldn't so simple to detect if I was in a call in either
@@ -68,8 +134,7 @@ of them.
 
 ## Future Features
 
-- Make requests using HTTPS.
-- Set Active/inactive colour via config
+- Make requests using HTTPS
 - Allow other methods of changing colour (generalise)
 - Extend `live-light-server` api to be able to display more complicated patterns
 - Add docker images
@@ -78,6 +143,6 @@ of them.
 
 - [Assemble Mood Light](https://www.youtube.com/watch?v=eHD9JIQk0I)
 - [Setup `.local` address](https://www.howtogeek.com/167190/how-and-why-to-assign-the-.local-domain-to-your-raspberry-pi/)
-- [Inspired By](https://dev.to/azure/an-iot-busy-light-for-folks-working-from-home-34ig)
+- [Inspired By Jim Bennett ](https://dev.to/azure/an-iot-busy-light-for-folks-working-from-home-34ig)
 
 > P.S I'm sorry to my other brits for misspelling colour so may times 😢.

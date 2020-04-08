@@ -4,15 +4,51 @@ Description: The name of the USB device:
  The name of the USB as shown in `lsusb`, this is the USB device
  that will be checked for to updating the color of the mood light.
 
-Template: live-light-client/pi_address
+Template: live-light-client/server_address
 Type: string
-Description: Address of your PI:
+Description: Address of your server:
  Either an FQDN such as http://raspberrypi.local or the IP address
  to connect `live-light-server`. This should be where your
  `live-light-server` should be running.
 
-Template: live-light-client/logging_level
+Template: live-light-client/active_days
 Type: multiselect
+Choices: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
+Default: Monday, Tuesday, Wednesday, Thursday, Friday
+Description: Days of the Week:
+ Set the days when you want the live light to be active
+ i.e. working days (Mon - Fri).
+
+Template: live-light-client/start_time
+Type: string
+Default: 09:00
+Description: The Start Time:
+ The time you want your live light to turn on after.
+ Usually the time of day you start work i.e 09:00. 
+
+Template: live-light-client/end_time
+Type: string
+Default: 17:30
+Description: The End Time:
+ The time you want your live light to turn off after.
+ Usually the time of day you end work i.e 17:30.
+
+Template: live-light-client/active_color
+Type: string
+Default: #FF0000
+Description: The Active color:
+ The color of the light, as a hex code, when you are busy
+ i.e. RED.
+
+Template: live-light-client/inactive_color
+Type: string
+Default: #00FF00
+Description: The Inactive color:
+ The color of the light, as a hex code, when you are not
+ busy/available i.e. GREEN.
+
+Template: live-light-client/logging_level
+Type: select
 Choices: DEBUG, INFO, WARNING, ERROR, CRITICAL
 Default: INFO
 Description: Logging Level:

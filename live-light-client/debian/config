@@ -2,7 +2,12 @@
 . /usr/share/debconf/confmodule
 
 db_input high live-light-client/usb_name || true
-db_input high live-light-client/pi_address || true
+db_input high live-light-client/server_address || true
+db_input high live-light-client/active_days || true
+db_input high live-light-client/start_time || true
+db_input high live-light-client/end_time || true
+db_input high live-light-client/active_color || true
+db_input high live-light-client/inactive_color || true
 db_input high live-light-client/logging_level || true
 db_go
 db_stop

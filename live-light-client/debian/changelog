@@ -1,3 +1,9 @@
+live-light-client (0.2.0) stable; urgency=medium
+
+  * Add a schedule and specify colors.
+
+ -- Haseeb Majid <hello@haseebmajid.dev>  Fri, 10 Apr 2020 16:10:18 +0100
+
 live-light-client (0.1.0) stable; urgency=medium
 
   * Initial Release.
