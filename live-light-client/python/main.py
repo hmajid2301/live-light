@@ -253,13 +253,13 @@ def get_seconds_to_sleep(is_active_time, schedule):
     day_time_data = get_date_time_data(schedule)
     current_datetime = day_time_data["current_time"]
     if is_active_time:
-        second_to_sleep = (day_time_data["end_time"] - current_datetime).total_seconds()
+        seconds_to_sleep = (day_time_data["end_time"] - current_datetime).total_seconds()
     else:
         days_to_sleep = get_days_to_sleep(current_day=day_time_data["day"], active_days=schedule["active_days"])
         next_active_day_start_time = day_time_data["start_time"] + datetime.timedelta(days=days_to_sleep)
-        second_to_sleep = (next_active_day_start_time - current_datetime).total_seconds()
+        seconds_to_sleep = (next_active_day_start_time - current_datetime).total_seconds()
 
-    return second_to_sleep
+    return seconds_to_sleep
 
 
 def turn_on_off_live_light(is_active_time, observer):
@@ -311,7 +311,7 @@ def get_days_to_sleep(current_day, active_days):
     if next_day_index <= current_day_index:
         next_day_index += 7
 
-    days_until_next_active_day = next_day_index - current_day_index - 1
+    days_until_next_active_day = next_day_index - current_day_index
     return days_until_next_active_day
 
 

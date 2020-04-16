@@ -1,3 +1,9 @@
+live-light-client (0.2.1) stable; urgency=medium
+
+  * Miscalculating seconds to sleep.
+
+ -- Haseeb Majid <haseeb@pop-os.localdomain>  Thu, 16 Apr 2020 19:58:56 +0100
+
 live-light-client (0.2.0) stable; urgency=medium
 
   * Add a schedule and specify colors.

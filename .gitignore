@@ -8,10 +8,10 @@
 *.dsc
 live-light-server/debian/live-light-server/*
 live-light-client/debian/live-light-client/*
-venv/
 
 files
 *-build-stamp
 *.debhelper
 *.substvars
 *.conf
+.venv/
