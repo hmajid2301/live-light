@@ -1,3 +1,10 @@
+live-light-client (0.2.2) stable; urgency=medium
+
+  * Live light not turning on if process started before start time i.e. 8AM
+    where start time is 9:30AM.
+
+ -- haseeb <haseeb@haseeb-desktop>  Mon, 01 Jun 2020 08:16:53 +0100
+
 live-light-client (0.2.1) stable; urgency=medium
 
   * Miscalculating seconds to sleep.

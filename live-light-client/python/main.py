@@ -161,7 +161,9 @@ async def main():
     context = pyudev.Context()
     monitor = pyudev.Monitor.from_netlink(context)
     monitor.filter_by(subsystem="usb")
-    observer = pyudev.MonitorObserver(monitor, callback=usb_devices_changed, name="monitor-observer")
+    observer = pyudev.MonitorObserver(
+        monitor, callback=usb_devices_changed, name="monitor-observer"
+    )
 
     config = get_config()
     schedule = get_schedule_config(config)
@@ -205,7 +207,9 @@ def get_schedule_config(config):
         dict: Containing the active days, start and end times.
 
     """
-    active_days_list = [day.strip() for day in config.get("schedule", "active_days").split(",")]
+    active_days_list = [
+        day.strip() for day in config.get("schedule", "active_days").split(",")
+    ]
     start_time_hour, start_time_minute = config.get("schedule", "start_time").split(":")
     end_time_hour, end_time_minute = config.get("schedule", "end_time").split(":")
 
@@ -214,29 +218,6 @@ def get_schedule_config(config):
         "start": {"hour": int(start_time_hour), "minute": int(start_time_minute)},
         "end": {"hour": int(end_time_hour), "minute": int(end_time_minute)},
     }
-
-
-def get_date_time_data(schedule):
-    """Get data related to the "current" time. Such as the current day. The current date time.
-    The time to start and end the live light today.
-
-    Args:
-        schedule (dict): The schedule data i.e. active days, start and end times.
-
-    Returns:
-        dict: Containing the datetime data.
-
-    """
-    current_datetime = datetime.datetime.now()
-    current_day = current_datetime.strftime("%A")
-    start_time = current_datetime.replace(
-        hour=schedule["start"]["hour"], minute=schedule["start"]["minute"], second=0, microsecond=0
-    )
-    end_time = current_datetime.replace(
-        hour=schedule["end"]["hour"], minute=schedule["end"]["minute"], second=0, microsecond=0
-    )
-
-    return {"current_time": current_datetime, "day": current_day, "start_time": start_time, "end_time": end_time}
 
 
 def get_seconds_to_sleep(is_active_time, schedule):
@@ -253,13 +234,60 @@ def get_seconds_to_sleep(is_active_time, schedule):
     day_time_data = get_date_time_data(schedule)
     current_datetime = day_time_data["current_time"]
     if is_active_time:
-        seconds_to_sleep = (day_time_data["end_time"] - current_datetime).total_seconds()
+        seconds_to_sleep = (
+            day_time_data["end_time"] - current_datetime
+        ).total_seconds()
     else:
-        days_to_sleep = get_days_to_sleep(current_day=day_time_data["day"], active_days=schedule["active_days"])
-        next_active_day_start_time = day_time_data["start_time"] + datetime.timedelta(days=days_to_sleep)
-        seconds_to_sleep = (next_active_day_start_time - current_datetime).total_seconds()
+        days_to_sleep = get_days_to_sleep(
+            current_day=day_time_data["day"],
+            active_days=schedule["active_days"],
+            start_time=schedule["start"],
+        )
+        if current_datetime < day_time_data["start_time"]:
+            days_to_sleep -= 1
+
+        next_active_day_start_time = day_time_data["start_time"] + datetime.timedelta(
+            days=days_to_sleep
+        )
+        seconds_to_sleep = (
+            next_active_day_start_time - current_datetime
+        ).total_seconds()
 
     return seconds_to_sleep
+
+
+def get_date_time_data(schedule):
+    """Get data related to the "current" time. Such as the current day. The current date time.
+    The time to start and end the live light today.
+
+    Args:
+        schedule (dict): The schedule data i.e. active days, start and end times.
+
+    Returns:
+        dict: Containing the datetime data.
+
+    """
+    current_datetime = datetime.datetime.now()
+    current_day = current_datetime.strftime("%A")
+    start_time = current_datetime.replace(
+        hour=schedule["start"]["hour"],
+        minute=schedule["start"]["minute"],
+        second=0,
+        microsecond=0,
+    )
+    end_time = current_datetime.replace(
+        hour=schedule["end"]["hour"],
+        minute=schedule["end"]["minute"],
+        second=0,
+        microsecond=0,
+    )
+
+    return {
+        "current_time": current_datetime,
+        "day": current_day,
+        "start_time": start_time,
+        "end_time": end_time,
+    }
 
 
 def turn_on_off_live_light(is_active_time, observer):
@@ -284,7 +312,7 @@ def turn_on_off_live_light(is_active_time, observer):
         clear_color(server_address)
 
 
-def get_days_to_sleep(current_day, active_days):
+def get_days_to_sleep(current_day, active_days, start_time):
     """Get the number of days we should sleep for. This is used to work out how long the live light should be switched
     on for. Often this will be 0 if say it's Mon and next active day is Tue. But we can more days to sleep for
     example if it's Fri and next active day is Mon, then we will sleep for 2 days. Before we need to switch on the
@@ -303,7 +331,15 @@ def get_days_to_sleep(current_day, active_days):
         int: How many days we should turn the live light off for.
 
     """
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    days = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
     next_active_day = get_next_active_day(days, current_day, active_days)
     current_day_index = days.index(current_day)
     next_day_index = days.index(next_active_day)
@@ -335,7 +371,10 @@ def get_next_active_day(days, current_day, active_days):
     """
     common_days = [day for day in days if day in active_days]
     current_day_index = common_days.index(current_day)
-    next_active_day = 0 if current_day_index + 1 == len(common_days) else current_day_index + 1
+    days_in_common = len(common_days)
+    next_active_day = (
+        0 if current_day_index + 1 == days_in_common else current_day_index + 1
+    )
     return days[next_active_day]
 
 
