@@ -1,2 +1,2 @@
 pyudev==0.22.0
-requests==2.23.0
+requests==2.31.0
